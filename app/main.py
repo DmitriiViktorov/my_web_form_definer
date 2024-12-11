@@ -24,7 +24,19 @@ async def get_form(request: Request):
     """
     user_form_data = dict(request.query_params)
     if not user_form_data:
-        return JSONResponse(status_code=404, content={"error": {"message": "There are no parameters in the request."}})
+        return JSONResponse(status_code=404, content={
+            "error": {
+                "message": "There are no parameters in the request."
+            }
+        })
+
+    empty_fields = [key for key, value in user_form_data.items() if not value]
+    if empty_fields:
+        return JSONResponse(status_code=400, content={
+            "error": {
+                "message": f"Empty fields found: {', '.join(empty_fields)}"
+            }
+        })
     cleaned_user_data = await clean_user_data(user_form_data)
 
     result = await find_template(cleaned_user_data)

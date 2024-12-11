@@ -64,6 +64,16 @@ async def test_empty_params(test_client):
     assert response.json() == {"error": {"message": "There are no parameters in the request."}}
 
 @pytest.mark.asyncio
+async def test_empty_params_values(test_client):
+    user_data = {
+        "username": "",
+        "password": "",
+    }
+    response = test_client.post("/get_form", params=user_data)
+    assert response.status_code == 400
+    assert response.json()['error']['message'] == "Empty fields found: username, password"
+
+@pytest.mark.asyncio
 async def test_incorrect_method(test_client, test_data):
     response = test_client.get("/get_form", params=test_data)
     assert response.status_code == 405
