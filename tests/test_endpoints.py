@@ -1,10 +1,4 @@
 import pytest
-from httpx import AsyncClient
-import pytest
-from httpx import ASGITransport, AsyncClient
-from app.main import app
-
-
 
 @pytest.mark.asyncio
 async def test_correct_user_data(test_client):
