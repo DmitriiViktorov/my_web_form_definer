@@ -7,13 +7,15 @@ client = AsyncIOMotorClient(MONGO_DETAILS)
 database = client.forms
 forms_collection = database.get_collection("forms")
 
+test_collection = database.get_collection("test")
 
-async def initialize_database():
+
+async def initialize_database(collection):
 
     # await database.get_collection("forms").drop()
-    if await forms_collection.count_documents({}) == 0:
+    if await collection.count_documents({}) == 0:
         print("Initializing database...")
-        await forms_collection.create_index([("name", ASCENDING)], unique=True)
+        await collection.create_index([("name", ASCENDING)], unique=True)
         test_data = [
             {
                 "name": "User authentication",
@@ -40,4 +42,4 @@ async def initialize_database():
             }
         ]
 
-        await forms_collection.insert_many(test_data)
+        await collection.insert_many(test_data)
